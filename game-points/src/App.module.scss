@@ -1,0 +1,61 @@
+.wrapper {
+  display: grid;
+  background: white;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  max-width: 400px;
+  justify-content: center;
+}
+
+@mixin centered-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.item {
+  @include centered-box;
+
+  background: lightpink;
+  width: 200px;
+  height: 200px;
+}
+
+.item:hover{
+  background: lightgrey;
+}
+
+.gameApp {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+}
+
+.scoreWrapper {
+  width: 300px;
+}
+
+.scoreItemsHolder {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  
+  padding: 5px 0;
+  border-bottom: 1px solid grey;
+
+  :nth-child(2), :nth-child(3) {
+    text-align: center
+  }
+
+  .scoreItemLabel {
+    @include centered-box;
+  
+    background: lightpink;
+    width: 40px;
+    height: 40px;
+  }
+
+  .scoreItemQuantity {
+    text-align: center;
+  }
+}
