@@ -12,6 +12,8 @@ type GameItem = {
   bonus?: Bonus,
 }
 
+type BonusItem = Omit<GameItem, 'unitPoints'>;
+
 type GroupedItem = {
   [label: string] : GameItem[]
 }
@@ -28,67 +30,83 @@ interface ScoreItem {
   label: string,
   quantity: number,
   score: number
+  unitPoints?: number,
+}
+
+const useGetGameData = (items: GameItem[]): {
+  gameItems: GameItem[];
+  bonusItems: BonusItem[];
+} => {
+
+  const gameItems: GameItem[] = useMemo(()=>{
+    return items.map(item => ({ label: item.label, unitPoints: item.unitPoints }) )
+  }, [items])
+
+  const bonusItems: BonusItem[] = useMemo(()=>{
+    return items.filter(item => item.bonus).map(item => ({ label: item.label, bonus: item.bonus }))
+  },[items])
+
+  return { gameItems, bonusItems }
 }
 
 function App() {
-  const [score, setScore] = useState(0);
+  const [totalScore, setTotalScore] = useState(0);
   const [totalBonus, setTotalBonus] = useState(0);
+  const [scoreItemList, setScoreItemList] = useState<ScoreItem[]>([]);
 
-  const [clickedItems, setClickedItems] = useState<GameItem[]>([]);
+  const { gameItems, bonusItems } = useGetGameData(items);
 
-  const [groupedItems, setGroupedItems] = useState<GroupedItem>({});
+  const handleClickedItem = (item: GameItem) => {
+    // check if label exists, if so, increase quantity, or else add a new member
+    const tempList = scoreItemList;
+    const scoreItem = scoreItemList.find(scoreItem => scoreItem.label === item.label);
+    if (scoreItem) {
+      scoreItem.quantity += 1;
+      scoreItem.score = calculateScorePerItem(scoreItem)
+    } else {
+      const newScoreItem: ScoreItem = { label: item.label, quantity: 1, unitPoints: item.unitPoints, score: 0 };
+      newScoreItem.score = calculateScorePerItem(newScoreItem);
+      tempList.push(newScoreItem);
+    }
 
-  const handleClick = (item: GameItem) => {
-    setClickedItems(current => [...current, item]);
+    setScoreItemList(tempList);
   }
-
-  useEffect(()=>{
-    clickedItems.length > 0 && handleClickedItem();
-  },[clickedItems])
-
-  const handleClickedItem = useCallback(() => {
-    const grouped: GroupedItem = clickedItems.reduce((items: GroupedItem, item: GameItem) => {
-      const temp = item['label'];
-
-      const currentGroup = items[temp] ?? [];
-
-      return { ...items, [temp]: [...currentGroup, item]}
-    }, {})
-
-    setGroupedItems(grouped);
-
-    let totalItemPoints = 0;
-    let totalBonusPoints = totalBonus;
-
-    Object.keys(grouped).map(label => {
-      const { unitPoints, bonus} = items.find(item => item.label === label) as GameItem;
-      const length = grouped[label].length;
-
-      // check if there's bonus
-      const isBonusCondition = bonus && length === bonus.collect;
-      
-      totalItemPoints += isBonusCondition ? bonus.yield + (length - bonus.collect) * unitPoints : unitPoints * length;
-      if (isBonusCondition) totalBonusPoints += bonus.yield - (unitPoints * length);
-    })
-
-    setScore(totalItemPoints);
-    setTotalBonus(totalBonusPoints);
-
-  }, [clickedItems])
 
   const handleResetGame = () => {
-    setGroupedItems({});
-    setClickedItems([]);
+    setScoreItemList([])
     setTotalBonus(0);
-    setScore(0);
+    setTotalScore(0);
   }
 
-  console.log('i am rendered')
+  const calculateScorePerItem = (scoreItem: ScoreItem) => {
+    // get properties
+    const { label, quantity, unitPoints = 0, score = 0 } = scoreItem;
+
+    // check if there's bonus
+    const bonus = bonusItems.find(item => item.label === label)?.bonus;
+
+    // check if there's bonus condition 
+    const isBonusCondition = bonus && quantity === bonus?.collect;
+    const bonusAmount = isBonusCondition ? bonus.yield - quantity  * unitPoints : 0
+
+    const addition = unitPoints + (isBonusCondition ? bonusAmount : 0);
+
+    const newScore = score + addition
+
+    // add this new score to total score
+    setTotalScore(current => current + addition);
+    // add this bonus to total bonus
+    setTotalBonus(current => current + bonusAmount);
+
+    return newScore;
+  }
 
   return (
-    <div className={styles.gameApp}>
-      <GameLeftPanel title="Kahoot! POINTS" onClick={(item) => handleClick(item)} />
-      <GameRightPanel title="PLAYER ITEMS" onClick={handleResetGame} groupedItems={groupedItems} totalBonus={totalBonus} totalScore={score} />
+    <div className={styles.main}>
+      <div className={styles.gameApp}>
+        <GameLeftPanel title="Kahoot! POINTS" gameItems={gameItems} onClick={(item) => handleClickedItem(item)} />
+        <GameRightPanel title="PLAYER ITEMS" onClick={handleResetGame} scoreItems={scoreItemList} totalBonus={totalBonus} totalScore={totalScore} />
+      </div>
     </div>
   )
 }
@@ -104,13 +122,13 @@ const GenericPanel = ({ title, children, width} : { title: string | React.ReactN
   )
 }
 
-const GameLeftPanel = ({ title, onClick, style }:{ title: React.ReactNode, onClick: (item: GameItem) => void, style?: React.CSSProperties; }) => {
+const GameLeftPanel = ({ title, gameItems, onClick, style }:{ title: React.ReactNode, gameItems: GameItem[], onClick: (item: GameItem) => void, style?: React.CSSProperties; }) => {
   return (
     <GenericPanel title={title} width={600}>
       <div className={styles.leftPanel}>
         <h4>ITEMS</h4>
         <div className={styles.gameWrapper}>
-          {items.map(item => (
+          {gameItems.map(item => (
             <div key={item.label} className={styles.item} onClick={() => onClick(item)}>{item.label}</div>
           ))}
         </div>
@@ -119,32 +137,11 @@ const GameLeftPanel = ({ title, onClick, style }:{ title: React.ReactNode, onCli
   )
 }
 
-const calculateScorePerItem = (item: GameItem, quantity: number) => {
-  const { unitPoints, bonus} = item;
-  const length = quantity;
-  const isBonusCondition = bonus && length >= bonus.collect && unitPoints * length < bonus.yield;
-    
-  // check if there's bonus
-  const score = isBonusCondition ? bonus.yield + (length - bonus.collect) * unitPoints : unitPoints * length;
-
-  return score;
-}
-
-const GameRightPanel = ({title, groupedItems, totalBonus, totalScore, onClick, style}: {title: string, totalBonus: number, totalScore: number, onClick: () => void, groupedItems: GroupedItem, style?: React.CSSProperties;}) => {
-
-  console.log('im hit')
-
-  const scoreItems: ScoreItem[] = useMemo(() => {
-    return Object.keys(groupedItems).map(label => ( {
-      label: label,
-      quantity: groupedItems[label].length,
-      score: calculateScorePerItem(groupedItems[label][0], groupedItems[label].length),
-    }))
-  }, [groupedItems]) 
+const GameRightPanel = ({title, scoreItems, totalBonus, totalScore, onClick, style}: {title: string, scoreItems: ScoreItem[], totalBonus: number, totalScore: number, onClick: () => void, style?: React.CSSProperties;}) => {
+  
 
   return (
     <GenericPanel title={title}>
-      {/* this will be in a context later and will listen to the bonuses n stuff, for now all in the same component */}
       <div className={styles.rightPanel}>
         <div className={styles.scoreWrapper}>
           <div className={styles.scoreItemsHolder}>

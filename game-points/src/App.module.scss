@@ -130,11 +130,19 @@ body {
   background: lightgrey;
 }
 
-.gameApp {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  width: 100%;
+.main {
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  
+  .gameApp {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    width: 1024px;
+  }
 }
+
 
 
 .panel {
