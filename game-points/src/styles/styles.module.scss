@@ -1,8 +1,11 @@
 @mixin centered-box {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+$breakpoint-tablet: 768px;
+$breakpoint-desktop: 1024px;
   
 .leftPanel {
   height: 100%;
@@ -149,10 +152,16 @@ body {
     display: grid;
     grid-template-columns: 2fr 1fr;
     width: 1024px;
+
+    @media (max-width: $breakpoint-desktop) {
+      grid-template-rows: 1fr 1fr;
+      grid-template-columns: auto;
+    }
+    @media (min-width: $breakpoint-tablet) {
+      grid-template-columns: 2fr 1fr;
+    }
   }
 }
-
-
 
 .panel {
   display: flex;
