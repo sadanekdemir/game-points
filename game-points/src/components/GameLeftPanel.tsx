@@ -14,7 +14,7 @@ const GameLeftPanel = ({ title, onClick, style }:{ title: React.ReactNode, onCli
     return (
       <div className={styles.gameWrapper}>
         {gameItems.map(item => (
-          <GameTile item={item} />
+          <GameTile key={item.label} item={item} />
         ))}
       </div>
     )

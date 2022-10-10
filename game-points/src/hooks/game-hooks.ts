@@ -34,13 +34,12 @@ export const useGameEngine = (items: GameItem[]): {
   calculateScorePerItem: (item:ScoreItem) => void;
   totalBonus: number,
   totalScore: number,
-  scoreItemList: ScoreItem[],
   scores: Record<string, ScoreItem>;
 } => {
   const { bonusItems } = useGetGameData(items);
+
   const [totalScore, setTotalScore] = useState(0);
   const [totalBonus, setTotalBonus] = useState(0);
-  const [scoreItemList, setScoreItemList] = useState<ScoreItem[]>([]);
 
   const [scores, setScores] = useState<ScoreList>({});
 
@@ -78,17 +77,20 @@ export const useGameEngine = (items: GameItem[]): {
 		// calculate new score
     const newScore = score + addition
 
+    /* I leave this for discussion later. i think it's much cleaner to have it, but then it won't be a pure function.
+       Usually this would be calculated in the backend or some sort, but i also like the idea that total score is calculated separately
+    */
     // // add this new score to total score
     // setTotalScore(current => current + addition);
     
     // // add this bonus to total bonus
-    // setTotalBonus(current => current + bonusAmount);
+    // setTotalBonus(current => current + (isBonusCondition ? bonusItem.bonusAmount : 0));
 
     return newScore;
   }
 
   const handleResetGame = () => {
-    setScoreItemList([])
+    setScores({});
     setTotalBonus(0);
     setTotalScore(0);
   }
@@ -99,7 +101,6 @@ export const useGameEngine = (items: GameItem[]): {
     calculateScorePerItem,
     totalBonus,
     totalScore,
-    scoreItemList,
     scores
   }
 }

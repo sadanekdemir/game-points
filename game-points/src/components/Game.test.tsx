@@ -1,5 +1,4 @@
 import { render, screen } from "@testing-library/react";
-import App from "../App";
 import { GameItem } from "../types";
 import React from 'react';
 import Game from "./Game";
@@ -21,6 +20,16 @@ describe('Game tests', () => {
 
 			const boxes = screen.getAllByRole('gameItem');
 			expect(boxes).toHaveLength(3);
+		})
+
+		it('should show default panel if no items are sent', () => {
+			render(<Game items={[]} />)
+			
+			const element = screen.getByText('Kahoot! POINTS');
+			expect(element).toBeInTheDocument();
+			
+			const emptyPanel = screen.getByText('Something seems to be off..')
+			expect(emptyPanel).toBeInTheDocument();
 		})
 	})
 

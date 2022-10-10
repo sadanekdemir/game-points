@@ -1,3 +1,4 @@
+import React from 'react';
 import styles from '../../styles/styles.module.scss'
 
 const GenericEmptyPanel = ({ message }: { message: string }) => {

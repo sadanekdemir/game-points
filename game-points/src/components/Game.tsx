@@ -1,3 +1,4 @@
+import React from 'react';
 import { createContext, useMemo } from 'react';
 import { useGameEngine, useGetGameData } from '../hooks/game-hooks';
 import styles from '../styles/styles.module.scss';
@@ -7,7 +8,6 @@ import GameRightPanel from './GameRightPanel';
 
 export interface GameData {
   gameItems?: GameItem[],
-  scoreItemList?: ScoreItem[],
   scores?: ScoreList,
   totalScore?: number,
   totalBonus?: number
@@ -17,12 +17,12 @@ export const GameContext = createContext<GameData>({});
 
 const Game = ({items}: {items: GameItem[]}) => {
   const { gameItems } = useGetGameData(items);
-  const { scoreItemList, totalBonus, totalScore, scores, handleClickedItem, handleResetGame } = useGameEngine(items);
+  const { totalBonus, totalScore, scores, handleClickedItem, handleResetGame } = useGameEngine(items);
 
   // maybe use this context for simpler solution, or maybe not
   const context = useMemo(()=>({
-    gameItems, scoreItemList, totalScore, totalBonus, scores
-  }),[gameItems, scoreItemList, scores, totalBonus, totalScore])
+    gameItems, totalScore, totalBonus, scores
+  }),[gameItems, scores, totalBonus, totalScore])
 
 	return (
 		<div className={styles.main}>
