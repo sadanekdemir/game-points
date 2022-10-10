@@ -9,7 +9,11 @@ export type GameItem = {
   bonus?: Bonus,
 }
 
-export type BonusItem = Omit<GameItem, 'unitPoints'> & { bonusAmount: number };
+export type BonusItem = {
+  label: string,
+  collect: number,
+  bonusAmount: number;
+}
 
 export interface ScoreItem {
   label: string,
@@ -17,3 +21,5 @@ export interface ScoreItem {
   score: number
   unitPoints: number,
 }
+
+export type ScoreList = Record<string, ScoreItem>;

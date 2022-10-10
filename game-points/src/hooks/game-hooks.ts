@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 import { calculateTotalScoreAndBonus } from "../helper";
-import { GameItem, BonusItem, ScoreItem } from "../types";
+import { GameItem, BonusItem, ScoreItem, ScoreList } from "../types";
 
 export const useGetGameData = (items: GameItem[]): {
   gameItems: GameItem[];
@@ -19,7 +19,7 @@ export const useGetGameData = (items: GameItem[]): {
     return items.filter(item => item.bonus).map(item => (
       { 
         label: item.label, 
-        bonus: item.bonus,
+        collect: item.bonus?.collect || 0,
         bonusAmount: calculateBonusAmount(item)
       })
     )
@@ -34,16 +34,17 @@ export const useGameEngine = (items: GameItem[]): {
   calculateScorePerItem: (item:ScoreItem) => void;
   totalBonus: number,
   totalScore: number,
-  scoreItemList: ScoreItem[]
+  scoreItemList: ScoreItem[],
+  scores: Record<string, ScoreItem>;
 } => {
   const { bonusItems } = useGetGameData(items);
   const [totalScore, setTotalScore] = useState(0);
   const [totalBonus, setTotalBonus] = useState(0);
   const [scoreItemList, setScoreItemList] = useState<ScoreItem[]>([]);
 
-  const [scores, setScores] = useState<Record<string, ScoreItem>>({});
+  const [scores, setScores] = useState<ScoreList>({});
 
-  const handleClickedItemExperimental = (item: GameItem) => {
+  const handleClickedItem = (item: GameItem) => {
     const scoreItem = scores[item.label];
     if (scoreItem) {
       scoreItem.quantity += 1;
@@ -56,26 +57,7 @@ export const useGameEngine = (items: GameItem[]): {
       setScores({...scores, [item.label]: newScoreItem})
     }
 
-    console.log('scores is: ', scores)
-  }
-
-  const handleClickedItem = (item: GameItem) => {
-    handleClickedItemExperimental(item);
-    // check if label exists, if so, increase quantity, else add a new item
-    const tempList = scoreItemList;
-    const scoreItem = scoreItemList.find(scoreItem => scoreItem.label === item.label);
-    if (scoreItem) {
-      scoreItem.quantity += 1;
-      scoreItem.score = calculateScorePerItem(scoreItem)
-    } else {
-      const newScoreItem: ScoreItem = { label: item.label, quantity: 1, unitPoints: item.unitPoints, score: 0 };
-      newScoreItem.score = calculateScorePerItem(newScoreItem);
-      tempList.push(newScoreItem);
-    }
-
-    setScoreItemList(tempList);
-
-    const { totalScore, totalBonus } = calculateTotalScoreAndBonus(tempList);
+    const { totalScore, totalBonus } = calculateTotalScoreAndBonus(scores);
     setTotalScore(totalScore);
     setTotalBonus(totalBonus);
   }
@@ -88,10 +70,7 @@ export const useGameEngine = (items: GameItem[]): {
     const bonusItem = bonusItems.find(item => item.label === label);
 
     // check if there's bonus condition 
-    const isBonusCondition = bonusItem && bonusItem.bonus && quantity % bonusItem.bonus.collect === 0;
-
-		// calculate bonus
-    // const bonusAmount = isBonusCondition ? bonus.yield * (quantity / bonus.collect) - quantity  * unitPoints : 0
+    const isBonusCondition = bonusItem && quantity % bonusItem.collect === 0;
 
 		// calculate how much to add
     const addition = unitPoints + (isBonusCondition ? bonusItem.bonusAmount : 0);
@@ -120,6 +99,7 @@ export const useGameEngine = (items: GameItem[]): {
     calculateScorePerItem,
     totalBonus,
     totalScore,
-    scoreItemList
+    scoreItemList,
+    scores
   }
 }

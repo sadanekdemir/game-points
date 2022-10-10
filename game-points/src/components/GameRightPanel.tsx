@@ -5,11 +5,6 @@ import { GameContext } from './Game';
 import GenericPanel from './shared/GenericPanel';
 
 const Scores = ({ scoreItems } : { scoreItems: ScoreItem[] }) => {
-	const data = useContext(GameContext);
-
-	const { scoreItemList: sc } = data
-	console.log('sc: ', sc)
-
 	return (
 		<div className={styles.scoreWrapper}>
 			<div className={styles.scoreItemsHolder}>
@@ -36,32 +31,33 @@ const Bonuses = ({ totalBonus }: { totalBonus: number }) => {
 	)
 }
 
-const TotalScore = ({ totalScore, onClick }: { totalScore: number, onClick: () => void }) => {
+const TotalScore = ({ totalScore, onReset }: { totalScore: number, onReset: () => void }) => {
 	return (
 		<div className={styles.totalScore}>
 			<div>
 				Total <h3> {totalScore} </h3>
 			</div>
 
-			<button onClick={onClick}>
+			<button onClick={onReset}>
 				New game
 			</button>
 		</div>
 	)
 }
 
-const GameRightPanel = ({title, scoreItems, totalBonus, totalScore, onClick, style}: {title: string, scoreItems: ScoreItem[], totalBonus: number, totalScore: number, onClick: () => void, style?: React.CSSProperties;}) => {
+const GameRightPanel = ({title, onReset, style}: {title: string, onReset: () => void, style?: React.CSSProperties;}) => {
 	const data = useContext(GameContext);
 
-	const { totalBonus: tb, totalScore: ts } = data
-	console.log('ts: ', ts)
+	const { totalBonus, totalScore, scores } = data;
+
+	const scoreItems = Object.entries(scores || {}).map(([k, v]) => ({ ...v }));
 
   return (
     <GenericPanel title={title}>
       <div className={styles.rightPanel}>
 				<Scores scoreItems={scoreItems} />
-				<Bonuses totalBonus={totalBonus} />
-				<TotalScore totalScore={totalScore} onClick={onClick} />
+				<Bonuses totalBonus={totalBonus || 0} />
+				<TotalScore totalScore={totalScore || 0} onReset={onReset} />
       </div>
     </GenericPanel>
   )
