@@ -4,166 +4,176 @@
     align-items: center;
   }
   
-  .leftPanel {
-    height: 100%;
-    overflow-y: scroll;
+.leftPanel {
+  height: 100%;
+  max-height: 768px;
+  overflow-y: scroll;
+
+  h4 {
+    padding: 0rem 1rem;
+  }
+
+  .gameWrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2rem;
+    padding: 0 1rem 2rem;
   
-    h4 {
-      padding: 0rem 1rem;
-    }
-  
-    .gameWrapper {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 2rem;
-      padding: 0 1rem 2rem;
+    .item {
+      @include centered-box;
     
-      .item {
-        @include centered-box;
-      
-        background: #eb670f;
-        width: 130px;
-        height: 130px;
-        font-size: 3rem;
-        box-shadow: 5px 1px 23px -25px rgba(0,0,0,0.66);
-        user-select: none;
-        font-weight: 600;
-        transition: all 0.1s ease-in;
-    
-        &:hover {
-          box-shadow: 5px 10px 43px -25px rgba(0,0,0,0.66);
-        }
+      background: #eb670f;
+      width: 130px;
+      height: 130px;
+      font-size: 3rem;
+      box-shadow: 5px 1px 23px -25px rgba(0,0,0,0.66);
+      user-select: none;
+      font-weight: 600;
+      transition: all 0.1s ease-in;
+      cursor: pointer;
   
-        &:active {
-          background: #ffa602;
-        }
+      &:hover {
+        box-shadow: 5px 10px 43px -25px rgba(0,0,0,0.66);
+      }
+
+      &:active {
+        background: #ffa602;
       }
     }
   }
-  
-  .rightPanel {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  
-    .scoreWrapper {
-      width: 100%;
+}
+
+.rightPanel {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  .scoreWrapper {
+    
+    .scoreScroll {      
       height: 500px;
       overflow-y: scroll;
-    
-      .scoreItemsHolder {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        align-items: center;
-        padding: 1rem;
-        
-        border-bottom: 1px solid grey;
-      
-        :nth-child(2), :nth-child(3) {
-          text-align: center
-        }
-      
-        .scoreItemLabel {
-          @include centered-box;
-        
-          background: #ffa602;
-          width: 40px;
-          height: 40px;
-        }
-      
-        .scoreItemQuantity {
-          text-align: center;
-        }
-      }
     }
-    
-    @mixin scores {
-      @include centered-box;
   
-      justify-content: flex-start;
-      padding: 1rem;
-      border: 1px solid gray;
-      text-transform: uppercase;
-      font-size: 1rem;
-      font-weight: 700;
-    }
-    
-    .bonuses {
-      @include scores;
-      height: 30px;
-    }
-    
-    .totalScore {
-      @include scores;
-  
-      height: 50px;
-    
-      h3 {
-        margin: 0;
-      }
-    
-      button {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 40px;
-    
-        font-family: "Montserrat", sans-serif;
-        font-size: 1rem;
-        text-transform: uppercase;
-        background-color: #0aa3a3;
-      }
-    
+    .scoreItemsHolder {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-    }
-  }
-  
-  body {
-    font-family: "Montserrat", sans-serif;
-    font-weight: 400;
-    margin: 0;
-  }
-  
-  .item:hover{
-    background: lightgrey;
-  }
-  
-  .main {
-    display: flex;
-    height: 100vh;
-    justify-content: center;
-    align-items: center;
-    
-    .gameApp {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      width: 1024px;
-    }
-  }
-  
-  
-  
-  .panel {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    border: 1px solid gray;
-  
-    & > div {
-      // padding: 1rem;
-    }
-    
-    .title {
-      display: flex;
-      justify-content: flex-start;
+      grid-template-columns: 1fr 1fr 1fr;
       align-items: center;
-      padding: 0.5rem 1rem;
-  
-      border: 1px solid gray;
-      font-size: 1.5rem;
-      font-weight: 600;
+      padding: 1rem;
+      
+      border-bottom: 1px solid grey;
+    
+      :nth-child(2), :nth-child(3) {
+        text-align: center
+      }
+    
+      .scoreItemLabel {
+        @include centered-box;
+      
+        background: #ffa602;
+        width: 40px;
+        height: 40px;
+      }
+    
+      .scoreItemQuantity {
+        text-align: center;
+      }
     }
   }
+  
+  @mixin scores {
+    @include centered-box;
+
+    justify-content: flex-start;
+    padding: 1rem;
+    border: 1px solid gray;
+    text-transform: uppercase;
+    font-size: 1rem;
+    font-weight: 700;
+  }
+  
+  .bonuses {
+    @include scores;
+    height: 30px;
+  }
+  
+  .totalScore {
+    @include scores;
+
+    height: 50px;
+  
+    h3 {
+      margin: 0;
+    }
+  
+    button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 40px;
+  
+      font-family: "Montserrat", sans-serif;
+      font-size: 1rem;
+      text-transform: uppercase;
+      background-color: #0aa3a3;
+    }
+  
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+body {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  margin: 0;
+}
+
+.emptyPanel {
+  display: flex;
+  padding: 1rem;
+}
+
+.item:hover{
+  background: lightgrey;
+}
+
+.main {
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  
+  .gameApp {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    width: 1024px;
+  }
+}
+
+
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: 768px;
+  border: 1px solid gray;
+
+  & > div {
+    // padding: 1rem;
+  }
+  
+  .title {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 1rem;
+
+    border: 1px solid gray;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+}
   

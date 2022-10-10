@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import styles from '../styles/styles.module.scss'
 import { ScoreItem } from '../types';
 import { GameContext } from './Game';
+import GenericEmptyPanel from './shared/GenericEmptyPanel';
 import GenericPanel from './shared/GenericPanel';
 
 const Scores = ({ scoreItems } : { scoreItems: ScoreItem[] }) => {
@@ -12,15 +13,19 @@ const Scores = ({ scoreItems } : { scoreItems: ScoreItem[] }) => {
 				<span>Quantity</span>
 				<span>Score</span>
 			</div>
-			{scoreItems.length > 0 && 
-				scoreItems.map(scoreItem => (
-					<div key={scoreItem.label} className={styles.scoreItemsHolder}>
-						<div className={styles.scoreItemLabel}>{scoreItem.label}</div>
-						<div className={styles.scoreItemQuantity}>{scoreItem.quantity}</div>
-						<div>{scoreItem.score}</div>
-					</div>
-				))
-			}
+			<div className={styles.scoreScroll}>
+				{scoreItems.length > 0 ? 
+					scoreItems.map(scoreItem => (
+						<div key={scoreItem.label} className={styles.scoreItemsHolder}>
+							<div className={styles.scoreItemLabel}>{scoreItem.label}</div>
+							<div className={styles.scoreItemQuantity}>{scoreItem.quantity}</div>
+							<div>{scoreItem.score}</div>
+						</div>
+					)) : (
+						<GenericEmptyPanel message="Start the game by clicking on the tiles!" />
+					)
+				}
+			</div>
 		</div>
 	)
 }
@@ -56,8 +61,10 @@ const GameRightPanel = ({title, onReset, style}: {title: string, onReset: () => 
     <GenericPanel title={title}>
       <div className={styles.rightPanel}>
 				<Scores scoreItems={scoreItems} />
-				<Bonuses totalBonus={totalBonus || 0} />
-				<TotalScore totalScore={totalScore || 0} onReset={onReset} />
+				<div>
+					<Bonuses totalBonus={totalBonus || 0} />
+					<TotalScore totalScore={totalScore || 0} onReset={onReset} />
+				</div>
       </div>
     </GenericPanel>
   )

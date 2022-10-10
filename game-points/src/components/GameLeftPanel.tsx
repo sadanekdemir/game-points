@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import styles from '../styles/styles.module.scss'
 import { GameItem } from '../types';
 import { GameContext } from './Game';
+import GenericEmptyPanel from './shared/GenericEmptyPanel';
 import GenericPanel from './shared/GenericPanel';
 
 const GameLeftPanel = ({ title, onClick, style }:{ title: React.ReactNode, onClick: (item: GameItem) => void, style?: React.CSSProperties; }) => {
@@ -32,7 +33,7 @@ const GameLeftPanel = ({ title, onClick, style }:{ title: React.ReactNode, onCli
         {gameItems && gameItems?.length > 0 ? (
           <GameTiles gameItems={gameItems} />
         ) : (
-          <div className={styles.gameWrapper}>Something went wrong here..</div>
+          <GenericEmptyPanel message="Something seems to be off.." />
         )
         }
       </div>
