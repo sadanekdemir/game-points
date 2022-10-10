@@ -12,7 +12,7 @@ const GameLeftPanel = ({ title, onClick, style }:{ title: React.ReactNode, onCli
 
   const GameTiles = ({ gameItems }: {gameItems: GameItem[]}) => {
     return (
-      <div className={styles.gameWrapper}>
+      <div className={styles.gameWrapper} data-test="game-items">
         {gameItems.map(item => (
           <GameTile key={item.label} item={item} />
         ))}
@@ -22,7 +22,7 @@ const GameLeftPanel = ({ title, onClick, style }:{ title: React.ReactNode, onCli
 
   const GameTile = ({ item } : {item: GameItem}) => {
     return (
-      <div key={item.label} role='gameItem' className={styles.item} onClick={() => onClick(item)}>{item.label}</div>
+      <div data-test="game-item" role='gameItem' className={styles.item} onClick={() => onClick(item)}>{item.label}</div>
     )
   }
   

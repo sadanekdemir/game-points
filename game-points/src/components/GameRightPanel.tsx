@@ -7,7 +7,7 @@ import GenericPanel from './shared/GenericPanel';
 
 const Scores = ({ scoreItems } : { scoreItems: ScoreItem[] }) => {
 	return (
-		<div className={styles.scoreWrapper}>
+		<div className={styles.scoreWrapper} data-test="score-panel">
 			<div className={styles.scoreItemsHolder}>
 				<span>Item</span>
 				<span>Quantity</span>
@@ -32,18 +32,18 @@ const Scores = ({ scoreItems } : { scoreItems: ScoreItem[] }) => {
 
 const Bonuses = ({ totalBonus }: { totalBonus: number }) => {
 	return (
-		<div className={styles.bonuses}>Bonuses: {totalBonus}</div>
+		<div data-test="game-bonus" className={styles.bonuses}>Bonuses: {totalBonus}</div>
 	)
 }
 
-const TotalScore = ({ totalScore, onReset }: { totalScore: number, onReset: () => void }) => {
+const TotalScore = ({ totalScore, disabled, onReset }: { totalScore: number, disabled: boolean, onReset: () => void }) => {
 	return (
-		<div className={styles.totalScore}>
+		<div className={styles.totalScore} data-test="game-score">
 			<div>
 				Total <h3> {totalScore} </h3>
 			</div>
 
-			<button onClick={onReset}>
+			<button onClick={onReset} data-test="game-reset" disabled={disabled}>
 				New game
 			</button>
 		</div>
@@ -63,7 +63,7 @@ const GameRightPanel = ({title, onReset, style}: {title: string, onReset: () => 
 				<Scores scoreItems={scoreItems} />
 				<div>
 					<Bonuses totalBonus={totalBonus || 0} />
-					<TotalScore totalScore={totalScore || 0} onReset={onReset} />
+					<TotalScore totalScore={totalScore || 0} onReset={onReset} disabled={scoreItems.length === 0} />
 				</div>
       </div>
     </GenericPanel>

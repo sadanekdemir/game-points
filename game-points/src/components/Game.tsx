@@ -26,7 +26,7 @@ const Game = ({items}: {items: GameItem[]}) => {
 
 	return (
 		<div className={styles.main}>
-			<div className={styles.gameApp}>
+			<div className={styles.gameApp} data-test="game-app">
         <GameContext.Provider value={context}>
           <GameLeftPanel title="Kahoot! POINTS" onClick={(item) => handleClickedItem(item)} />
           <GameRightPanel title="PLAYER ITEMS" onReset={handleResetGame} />
