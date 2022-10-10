@@ -15,9 +15,9 @@ const GenericPanel = ({ title, children, width, className } : { title: string | 
 
   return (
     <div className={innerClassName}>
-      <div className={styles.title}>
+      <span className={styles.title}>
         {title}
-      </div>
+      </span>
       {children}
     </div>
   )

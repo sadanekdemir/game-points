@@ -19,7 +19,7 @@ const Game = ({items}: {items: GameItem[]}) => {
   const { gameItems } = useGetGameData(items);
   const { totalBonus, totalScore, scores, handleClickedItem, handleResetGame } = useGameEngine(items);
 
-  // maybe use this context for simpler solution, or maybe not
+  // using context here to simplify the components and avoid prop drilling
   const context = useMemo(()=>({
     gameItems, totalScore, totalBonus, scores
   }),[gameItems, scores, totalBonus, totalScore])

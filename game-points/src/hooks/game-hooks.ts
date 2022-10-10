@@ -2,6 +2,14 @@ import { useCallback, useMemo, useState } from "react";
 import { calculateTotalScoreAndBonus } from "../helper";
 import { GameItem, BonusItem, ScoreItem, ScoreList } from "../types";
 
+/**
+ * Game data hook
+ * This takes the raw game data and prepares for it to be used by the game engine
+ * It simply creates a simplified array of gameItems and a bonus array
+ * For optimization, bonus amount is calculated and written as property, so that it can be reused in calculations
+ * @param items 
+ * @returns 
+ */
 export const useGetGameData = (items: GameItem[]): {
   gameItems: GameItem[];
   bonusItems: BonusItem[];
@@ -28,6 +36,12 @@ export const useGetGameData = (items: GameItem[]): {
   return { gameItems, bonusItems }
 }
 
+/**
+ * Game Engine, the main hook that deals with the game logic
+ * It holds the score as a key value pairs of string and scoreItem, and calculates the score when a new click happens
+ * @param items the dataset
+ * @returns 
+ */
 export const useGameEngine = (items: GameItem[]): {
   handleClickedItem: (item: GameItem) => void,
   handleResetGame: () => void

@@ -8,7 +8,7 @@ import GenericPanel from './shared/GenericPanel';
 const GameLeftPanel = ({ title, onClick, style }:{ title: React.ReactNode, onClick: (item: GameItem) => void, style?: React.CSSProperties; }) => {
   const data = useContext(GameContext);
 
-	const { gameItems } = data;
+  const { gameItems } = data;
 
   const GameTiles = ({ gameItems }: {gameItems: GameItem[]}) => {
     return (
