@@ -1,9 +1,15 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styles from '../styles/styles.module.scss'
 import { ScoreItem } from '../types';
+import { GameContext } from './Game';
 import GenericPanel from './shared/GenericPanel';
 
 const Scores = ({ scoreItems } : { scoreItems: ScoreItem[] }) => {
+	const data = useContext(GameContext);
+
+	const { scoreItemList: sc } = data
+	console.log('sc: ', sc)
+
 	return (
 		<div className={styles.scoreWrapper}>
 			<div className={styles.scoreItemsHolder}>
@@ -45,6 +51,10 @@ const TotalScore = ({ totalScore, onClick }: { totalScore: number, onClick: () =
 }
 
 const GameRightPanel = ({title, scoreItems, totalBonus, totalScore, onClick, style}: {title: string, scoreItems: ScoreItem[], totalBonus: number, totalScore: number, onClick: () => void, style?: React.CSSProperties;}) => {
+	const data = useContext(GameContext);
+
+	const { totalBonus: tb, totalScore: ts } = data
+	console.log('ts: ', ts)
 
   return (
     <GenericPanel title={title}>

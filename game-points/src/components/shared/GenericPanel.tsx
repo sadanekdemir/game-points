@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import styles from '../../styles/styles.module.scss'
 
 const GenericPanel = ({ title, children, width, className } : { title: string | React.ReactNode, children: React.ReactNode, width?: number, className?: string }) => {
-
 	const [cl, setCl] = useState([styles.panel]);
 	const [innerClassName, setInnerClassName] = useState('')
 

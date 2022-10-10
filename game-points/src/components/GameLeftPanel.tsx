@@ -10,7 +10,7 @@ const GameLeftPanel = ({ title, gameItems, onClick, style }:{ title: React.React
         <h4>ITEMS</h4>
         <div className={styles.gameWrapper}>
           {gameItems.map(item => (
-            <div key={item.label} className={styles.item} onClick={() => onClick(item)}>{item.label}</div>
+            <div key={item.label} role='gameItem' className={styles.item} onClick={() => onClick(item)}>{item.label}</div>
           ))}
         </div>
       </div>
