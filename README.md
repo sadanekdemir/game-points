@@ -27,3 +27,7 @@ clone the game-points folder
 `npm test:jest` for jest testing <br>
 `npm test:cypress` or yarn cypress open-ct for cypress testing
 
+### OBS
+Installing cypress and jest at the same time was a big challenging, because apparently there's a bug in the newest version of cypress. that made me spend some time to figure out, but i finally managed with some manual tweaks. 
+- https://github.com/cypress-io/cypress/issues/22059 and
+- https://github.com/cypress-io/cypress/issues/4089
