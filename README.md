@@ -1,6 +1,6 @@
 # game-points
 
-Interview case submission for Kahoo!
+Interview case submission for Kahoot!
 
 This was a fun assignment! Although it looked very trivial at first, the more i spent time on it i find other ideas to fix it. Due to lack of time last week and my sickness, it was a little to sit with it for long, so i have done small changes every now and then.
 
@@ -29,5 +29,5 @@ clone the game-points folder
 
 ### OBS
 Installing cypress and jest at the same time was a big challenging, because apparently there's a bug in the newest version of cypress. that made me spend some time to figure out, but i finally managed with some manual tweaks. 
-- https://github.com/cypress-io/cypress/issues/22059 and
+- https://github.com/cypress-io/cypress/issues/22059 
 - https://github.com/cypress-io/cypress/issues/4089
