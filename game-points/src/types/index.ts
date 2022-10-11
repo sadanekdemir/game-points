@@ -1,4 +1,4 @@
-export interface Bonus {
+export type Bonus = {
   collect: number,
   yield: number
 }
@@ -15,7 +15,7 @@ export type BonusItem = {
   bonusAmount: number;
 }
 
-export interface ScoreItem {
+export type ScoreItem = {
   label: string,
   quantity: number,
   score: number
@@ -23,3 +23,10 @@ export interface ScoreItem {
 }
 
 export type ScoreList = Record<string, ScoreItem>;
+
+export type GameData = {
+  gameItems?: GameItem[],
+  scores?: ScoreList,
+  totalScore?: number,
+  totalBonus?: number
+}

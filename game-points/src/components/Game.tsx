@@ -2,16 +2,9 @@ import React from 'react';
 import { createContext, useMemo } from 'react';
 import { useGameEngine, useGetGameData } from '../hooks/game-hooks';
 import styles from '../styles/styles.module.scss';
-import { GameItem, ScoreItem, ScoreList } from '../types';
+import { GameData, GameItem, ScoreItem, ScoreList } from '../types';
 import GameLeftPanel from './GameLeftPanel';
 import GameRightPanel from './GameRightPanel';
-
-export interface GameData {
-  gameItems?: GameItem[],
-  scores?: ScoreList,
-  totalScore?: number,
-  totalBonus?: number
-}
 
 export const GameContext = createContext<GameData>({});
 

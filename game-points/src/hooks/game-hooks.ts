@@ -59,17 +59,21 @@ export const useGameEngine = (items: GameItem[]): {
 
   const handleClickedItem = (item: GameItem) => {
     const scoreItem = scores[item.label];
+    // check if score item exists
     if (scoreItem) {
+      // increase quantity and calculate new score
       scoreItem.quantity += 1;
       scoreItem.score = calculateScorePerItem(scoreItem);
       setScores({...scores, [item.label]: scoreItem})
     } else {
+      // create a new score item, and calculate its score
       const newScoreItem: ScoreItem = { label: item.label, quantity: 1, unitPoints: item.unitPoints, score: 0 };
       newScoreItem.score = calculateScorePerItem(newScoreItem);
       scores[item.label] = newScoreItem;
       setScores({...scores, [item.label]: newScoreItem})
     }
 
+    // calculate total score
     const { totalScore, totalBonus } = calculateTotalScoreAndBonus(scores);
     setTotalScore(totalScore);
     setTotalBonus(totalBonus);
